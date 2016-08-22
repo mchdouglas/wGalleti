@@ -1,0 +1,150 @@
+<div class="container">
+	<div class="row">
+		<div class="card">
+			<div class="card-content">	
+				<div class="row">
+					<div class="col s2">
+						<img class="circle circle-320" ng-src="{{profile.dataProfile.picture}}">
+					</div>
+					<div class="col s10">
+						<div class="row center-align flow-text">
+							<h3>{{profile.dataProfile.username}}</h3>
+							<ul>
+								<li><a href="mailto:{{profile.dataProfile.email}}">{{profile.dataProfile.email}}</a></li>
+								<li>{{profile.dataProfile.contact}}</li>
+								<li><a href="https://{{profile.dataProfile.telegram}}" target="_blank">{{profile.dataProfile.telegram}}</a></li>
+								<li><a href="https://{{profile.dataProfile.github}}" target="_blank">{{profile.dataProfile.github}}</a></li>
+							</ul>
+						</div>
+					</div>					
+					
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+	<div class="row">
+		<div class="card">
+			<div class="card-content">
+				<div class="card-title center-align">
+					Sobre
+				</div>
+				<p ng-bind-html="profile.dataProfile.about | trust"></p>
+			</div>
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="card">
+			<div class="card-content">
+				<div class="card-title center-align">Formação</div>
+				<div class="row">
+					<div class="col s4">
+						<strong>Curso</strong> : {{profile.dataProfile.education.course}}							
+					</div>
+					<div class="col s5">
+						<strong>Instituição</strong> : {{profile.dataProfile.education.institution}}							
+					</div>
+					<div class="col s3">
+						<strong>Ano Conclusão</strong> : {{profile.dataProfile.education.conclusion}}							
+					</div>
+					
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="card">
+			<div class="card-content">
+				<div class="card-title center-align">
+					Habilidades
+					<span class="right">
+						<i class="material-icons yellow-text" ng-repeat="item in profile.ratingStar(5) track by item">star</i>
+					</span>
+				</div>
+				<div class="row">
+					<div class="col s6" ng-repeat="skills in profile.dataProfile.skills">
+						<ul class="collection with-header">
+							<li class="collection-header teal">{{skills.name}}</li>
+							<li class="collection-item" ng-repeat="value in skills.info">
+								<div>
+									{{value.name}} 
+									<a class="secondary-content">
+										<i class="material-icons yellow-text" ng-repeat="item in profile.ratingStar(value.rating) track by item">star</i>
+									</a>
+								</div>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>					
+		</div>
+	</div>
+	
+
+	<div class="row">
+		<div class="card">
+			<div class="card-content">
+				<div class="card-title center-align">
+					Trabalhos
+				</div>
+				
+				<ul class="collection">
+					<li class="collection-item avatar" ng-repeat="value in profile.dataProfile.jobs">
+						<div class="col s1">
+							<img ng-src="{{value.img}}" alt="" class="circle circle-120">
+						</div>
+						<div class="col s11">
+							
+							<h4 class="title">{{value.company}}</h4>
+							<p>
+								<strong>De:</strong> {{value.begin | Date | date : 'dd/MM/yyyy'}} <strong>Até:</strong> {{value.end | Date | date : 'dd/MM/yyyy'}} <br>
+							</p>
+							<p>
+								<strong>Atividades:</strong> {{value.description}}
+							</p>
+							<a href="{{value.site}}" class="secondary-content" target="_blank"><i class="material-icons">language</i></a>
+						</div>
+					</li>
+			</div>
+				
+			</div>
+	</div>
+
+
+	<div class="row">
+		<div class="card">
+			<div class="card-content">
+				<div class="card-title center-align">
+					Projetos
+				</div>
+				<table class="bordered responsive-table highlight">
+					<thread>
+						<tr>
+							<th>Nome</th>
+							<th>Descrição</th>
+							<th>Tecnlogias</th>
+						</tr>
+					</thread>
+					<tbody>
+						<tr ng-repeat="value in profile.dataProfile.projects">
+							<td>{{value.name}}</td>
+							<td>{{value.description}}</td>
+							<td>
+								<small>
+									<ul class="collection">
+										<li ng-repeat="tecs in value.tags" class="collection-item">{{tecs}}</li>
+									</ul>											
+								</small>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+				
+			</div>
+		</div>
+	</div>
+
+</div>

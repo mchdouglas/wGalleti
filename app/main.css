@@ -1,0 +1,19 @@
+.circle-320 {
+	width: 260px;
+	height: 260px;
+}
+
+
+.collection .collection-item.avatar .circle {
+	width: 120px;
+	height: 120px;
+}
+
+.collection .collection-item.avatar {
+	min-height: 160px;
+}
+
+.collection-header{
+	font-weight: bold;
+	text-align: center;
+}
