@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>Ajax com Jquery</title>
+</head>
+<body>
+	<div>
+		<!-- Aqui com botão com id -->
+		<button id="btnCall">E La vamos nóis!</button>
+		<hr>
+		<!-- Aqui retorno com id -->
+		<pre id="preRetorno"></pre>
+	</div>
+	<!-- carrega jquery -->
+	<script src="//code.jquery.com/jquery-3.1.0.min.js"></script>
+	<script>
+		(function () {
+			// inicializa jquery
+			$(document)
+				.ready(
+					function(){
+
+						// Quando clicar no id btnCall
+						$('#btnCall').click(function(){
+							// Chama o ajax
+							$.ajax({
+								// passa url
+								url : 'http://intranet.gruposcheffer.com/jsonServer/pluma/apiPainel/paradaResumo?anosafra=2015',
+							})
+							// quando terminar
+							.then(
+								// sucesso
+								function(rest){
+									// devolve o retorno pro html
+									$('#preRetorno').html(JSON.stringify(rest))
+									// da um tempo pro browser redirecionar
+									setTimeout(function(){
+										// mada para o outro site
+										window.location.href = 'http://meusite.com.br'
+									}, 3000)
+								},
+								// erro
+								function(error){
+									// printa o erro
+									console.log(error)
+								}
+							)
+
+						})
+					}
+				)
+		})()
+	</script>
+</body>
+</html>
