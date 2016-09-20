@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>Ajax com Angular</title>
+</head>
+<!-- Aqui inicializa o modulo do angular no html -->
+<body ng-app="app">
+	<!-- aqui inicializa o controller e da o apelido de main para o mesmo -->
+	<div ng-controller="MainController as main">
+		<!-- aqui atribui a função call no click que do botão -->
+		<button ng-click="main.Call()">E La vamos nóis!</button>
+		<hr>
+		<!-- aqui o retorno da chamada http -->
+		<pre>{{main.retorno | json}}</pre>
+	</div>
+	<!-- carrega o angular -->
+	<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.min.js"></script>
+	<!-- aqui a mágica -->
+	<script>
+		// Só questão de padrão
+		(function () {
+			'use strict'
+			angular
+				// inicializa o modulo app
+				.module('app', [])
+				// instancia o controller
+				.controller('MainController', MainController)
+			/**
+			 * inicializa o controller injetando as dependencias:
+			 * $http - Para consumir requisições ajax
+			 * $window - Para redirecionamento de url
+			 * $timeout - Frescura!!!
+			 */
+			function MainController($http, $window, $timeout) {
+				// recebe todo o $scope na variavel vm
+				var vm = this
+				// define mensagem do retorno
+				vm.retorno = 'Sem processamento'
+				// instancia função call do click do botão
+				vm.Call = function(){
+					// avisa o retorno pra aguarda
+					vm.retorno = 'Aguarde!!!'
+					// inicializa $http
+					$http
+						// fala que é GET (podia ser post, put, delete)
+						.get('http://intranet.gruposcheffer.com/jsonServer/pluma/apiPainel/paradaResumo?anosafra=2015')
+						// quando terminar
+						.then(
+							// successo
+							function(rest){
+								// joga o retorno para a variavel
+								vm.retorno = rest.data
+								// da um tempo pro browser mostrar o retorno
+								$timeout(function(){
+									// redireciona para outra página
+									$window.location.href = 'http://meusite.com.br'
+								}, 3000)
+							},
+							// erro
+							function(error){
+								// printa o erro no console!
+								console.log(error.data)
+							}
+						)
+				}
+			}
+		})()
+	</script>
+</body>
+</html>
