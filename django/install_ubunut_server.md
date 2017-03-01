@@ -1,8 +1,12 @@
-# Instalando servidor Ubuntu para hospedar páginas python + django
+# Ubuntu 16.10 + Apache2 + Python + WSGI
 
 Vamos instalar um servidor ubuntu 16.10 para hospedar páginas web desenvolvidas em python com framework django.
 
+## Atulização e pequenas correções
+
 Antes de começar, vamos resolver o problema de linguagem da versão 16.10
+
+Como **root**
 
 ```bash
 apt-get install language-pack-pt
@@ -18,17 +22,42 @@ apt-get upgrade
 apt-get dist-upgrade
 ```
 
+## Usuários
+
+Agora criamos o usuário `deploy`
+
+```bash
+useradd -m -d /home/deploy -G adm,www-data,sudo -s /bin/bash deploy
+passwd deploy
+```
+
+Só para confirmar, verifique em `/etc/passwd` se ficou dessa forma
+
+```bash
+deploy:x:1001:1001::/home/deploy:/bin/bash
+```
+
+Agora edite o arquivo `nano ~/.profile` e adicione as seguinte informações
+
+```
+if [ "$BASH" ]; then
+  if [ -f ~/.bashrc ]; then
+    . ~/.bashrc
+  fi
+fi
+```
+
 
 ## Preparando o servidor
 
-Efetue as configurações de rede para adicionar o endereço de IP do servidor.
+**Com usuário deploy**, efetue as configurações de rede para adicionar o endereço de IP do servidor.
 
 Primeiro, vamos preparar o ambiente de rede. Para isso, vamos determinar o endereço de IP no arquivo `/etc/host`
 
 ```
 127.0.0.1       localhost
 127.0.1.1       nome_do_server
-192.168.0.40    nome_do_server
+192.168.0.IP    nome_do_server
 ```
 
 Agora vamos registrar o dominio de busca para que procure na rede interna, alterando o arquivo `/etc/resolvconf/resolv.conf.d/base`
@@ -37,11 +66,11 @@ Agora vamos registrar o dominio de busca para que procure na rede interna, alter
 search domain_name.com
 ```
 
-Agora rode o comando para aplicar as resoluções `resolvconf -u`
+Agora rode o comando para aplicar as resoluções `sudo resolvconf -u`
 
 Vamos reiniciar os serviços de rede e efetuar os testes
 
-`/etc/init.d/networking restart`
+`sudo /etc/init.d/networking restart`
 
 `nslookup nome_do_server`
 
@@ -49,7 +78,7 @@ Vamos reiniciar os serviços de rede e efetuar os testes
 
 ## Primeiro o GIT
 
-Para instalar o git rode o comando `apt-get install git`
+Para instalar o git rode o comando `sudo apt-get install git`
 
 Após isso, vamos efetuar a configuração das variáveis globais
 
@@ -77,15 +106,15 @@ oracle-instantclient11.2-jdbc-11.2.0.4.0-1.x86_64.rpm
 oracle-instantclient11.2-sqlplus-11.2.0.4.0-1.x86_64.rpm
 ```
 
-Vamos utilizar o `alien` para efetuar a instalação
+Vamos utilizar o `alien` para efetuar a instalação (`sudo apt-get install alien`)
 
 ```bash
 apt-get install alien
 cd diretorio_dos_arquivos.rpm
-alien -i oracle-instantclient11.2-basic-11.2.0.3.0-1.x86_64.rpm
-alien -i oracle-instantclient11.2-devel-11.2.0.4.0-1.x86_64.rpm
-alien -i oracle-instantclient11.2-jdbc-11.2.0.4.0-1.x86_64.rpm
-alien -i oracle-instantclient11.2-sqlplus-11.2.0.4.0-1.x86_64.rpm
+sudo alien -i oracle-instantclient11.2-basic-11.2.0.3.0-1.x86_64.rpm
+sudo alien -i oracle-instantclient11.2-devel-11.2.0.4.0-1.x86_64.rpm
+sudo alien -i oracle-instantclient11.2-jdbc-11.2.0.4.0-1.x86_64.rpm
+sudo alien -i oracle-instantclient11.2-sqlplus-11.2.0.4.0-1.x86_64.rpm
 ```
 
 Agora, vamos editar as variaveis de ambiente para configurar algumas coisas que o client do oracle necessita. `nano ~/.bashrc` e adicione as seguintes linhas no final do arquivo:
@@ -100,16 +129,16 @@ export TNS_ADMIN=$ORACLE_HOME/network/admin
 
 Agora vamos efetuar as configurações com o comando `source ~/.bashrc`
 
-Precisamos criar o diretório para os apelidos de rede (TNS_ADMIN). `mkdir -p $TNS_ADMIN`
+Precisamos criar o diretório para os apelidos de rede (TNS_ADMIN). `sudo mkdir -p $TNS_ADMIN`
 
-E por ultimo, precisamos criar o arquivo de tns (tnsnames.ora). `touch $TNS_ADMIN/tnsnames.ora`
+E por ultimo, precisamos criar o arquivo de tns (tnsnames.ora). `sudo touch $TNS_ADMIN/tnsnames.ora`
 
 Edite o mesmo e cole os nomes de rede atuais
 
 Antes de rodar o `sqlplus`, precisamos instalar a dependencia do `libaio.so`
 
 ```bash
-apt-get install libaio1 libaio-dev
+sudo apt-get install libaio1 libaio-dev
 ```
 
 ## JavaScript
@@ -119,12 +148,12 @@ Vamos instalar as dependencias para execuções dos javascripts
 Primeiro, vamos instalar o node
 
 ```bash
-apt-get install nodejs npm nodejs-legacy
+sudo apt-get install nodejs npm nodejs-legacy
 ```
 
 Feito isso, vamos testar instando dois pacotes essênciais.
 ```bash
-npm i -g gulp bower
+sudo npm i -g gulp bower
 ```
 
 Verificando se esta tudo certo, rode:
@@ -135,20 +164,20 @@ gulp -v
 ```
 
 
-## Python
+## Python e VirtualENV
 
 Para não termos problemas de versões do sistema operacional, vamos utilizar o pyenv.
 
 Antes de prosseguir a instalação, precisamos instalar as seguintes dependências:
 
 ```bash
-apt-get install -y make build-essential libssl-dev zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev wget curl llvm libncurses5-dev libncursesw5-dev xz-utils
+sudo apt-get install -y make build-essential libssl-dev zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev wget curl llvm libncurses5-dev libncursesw5-dev xz-utils
 ```
 
 Agora vamos efetuar a instalação do pyenv
 
 ```bash
-apt-get install git python-pip make build-essential libssl-dev zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev
+sudo apt-get install git python-pip make build-essential libssl-dev zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev
 sudo pip install virtualenvwrapper
 
 git clone https://github.com/yyuu/pyenv.git ~/.pyenv
@@ -159,6 +188,7 @@ echo 'export PYENV_ROOT="$HOME/.pyenv"' >> ~/.bashrc
 echo 'export PATH="$PYENV_ROOT/bin:$PATH"' >> ~/.bashrc
 echo 'eval "$(pyenv init -)"' >> ~/.bashrc
 echo 'pyenv virtualenvwrapper' >> ~/.bashrc
+echo 'export WORKON_HOME=~/virtualenvs'>> ~/.bashrc
 ```
 
 
@@ -180,31 +210,6 @@ Para verificar, utilize:
 python -V
 Python 3.5.2
 ```
-
-
-## VirtualEnv
-
-Vamos instalar as dependencias:
-
-```
-apt-get install python-pip python-dev build-essential
-apt-get install python3-pip python3-dev
-```
-
-Atualizamos o PIP (Vamos utilizar a versão 3 do python)
-
-```
-pip3.5 install --upgrade pip
-pip3.5 install virtualenv virtualenvwrapper
-```
-
-Configuramos o virutalenv no `~/.bashrc` e adicionamos os seguintes itens no final do arquivo
-
-```
-# VirtualENV
-export WORKON_HOME=~/virtualenvs
-```
-
 
 ## Apache
 
@@ -298,4 +303,14 @@ Agora precisamos ativar a porta 8000 no apache.
 
 Para isso, adicione abaixo do comando `Listen 80` o comando `Listen 8000` e reinicie o apache `/etc/init.d/apache2 restart`
 
-Walahhh. Site funcionando
+## Ultimos ajustes
+
+Edite o arquivo `sudo nano /etc/group` e efetue as sequintes alterações
+
+Onde estiver `www-data:x:33:` ficara `www-data:x:33:deploy`
+
+Onde estiver  `deploy:x:1001:` ficara `deploy:x:1001:www-data`
+
+Reinicie o apache `sudo /etc/init.d/apache2 restart`
+
+**Feito isso, site funcionando**
