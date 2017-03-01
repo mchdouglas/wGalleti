@@ -83,8 +83,8 @@ Para instalar o git rode o comando `sudo apt-get install git`
 Após isso, vamos efetuar a configuração das variáveis globais
 
 ```bash
-git config --global user.name "TI Grupo Scheffer"
-git config --global user.email "ti@gruposcheffer.com.br"
+git config --global user.name "Seu Nome"
+git config --global user.email "seuemail@domain.com"
 ```
 
 Agora vamos adicionar uma chave publica para poder efetuar interação com os projetos
