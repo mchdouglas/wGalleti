@@ -1,4 +1,4 @@
-# Ubuntu 16.10 + Apache2 + Python + WSGI
+# Ubuntu 16.10 + Apache2 + Python + WSGI + Oracle
 
 Vamos instalar um servidor ubuntu 16.10 para hospedar páginas web desenvolvidas em python com framework django.
 
@@ -39,7 +39,7 @@ deploy:x:1001:1001::/home/deploy:/bin/bash
 
 Agora edite o arquivo `nano ~/.profile` e adicione as seguinte informações
 
-```
+```bash
 if [ "$BASH" ]; then
   if [ -f ~/.bashrc ]; then
     . ~/.bashrc
