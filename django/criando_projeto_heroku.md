@@ -126,6 +126,33 @@ JET_INDEX_DASHBOARD = 'jet.dashboard.dashboard.DefaultIndexDashboard'
 JET_APP_INDEX_DASHBOARD = 'jet.dashboard.dashboard.DefaultAppIndexDashboard'
 ```
 
+Agora vamos configurar o `djangorestframework`:
+
+Adicionando o `'rest_framework'`, `'rest_framework.authtoken'`, `'rest_auth'` ao **INSTALLED_APPS**, e criamos o a seguinte variavel:
+
+```python
+# Rest Framework
+
+REST_FRAMEWORK = {
+    'DEFAULT_FILTER_BACKENDS': ('django_filters.rest_framework.DjangoFilterBackend',),
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.TokenAuthentication',
+    )
+}
+```
+
+Agora vamos configurar o `cors-headers`:
+
+Adicionando o `'corsheaders'` ao **INSTALLED_APPS**, e criamos o a seguinte variavel:
+
+```python
+# Cors Headers
+CORS_ORIGIN_ALLOW_ALL = True
+```
+
+Em `MIDDLEWARE`, antes de `'django.middleware.common.CommonMiddleware'`, adicione `'corsheaders.middleware.CorsMiddleware',`
+
+
 Por ultimo, vamos informar as configurações de email:
 
 ```python
