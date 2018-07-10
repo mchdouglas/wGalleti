@@ -78,4 +78,4 @@ Apos concluir a atualização iniciar os serviços Senior Documentos Eletrônico
 
 ## Vide de Demonstração
 
-!video[Atualização](https://web.gruposcheffer.com/video/video_atualizacao.mp4)
+![](https://web.gruposcheffer.com/video/video_atualizacao.mp4)
