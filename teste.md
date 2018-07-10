@@ -78,7 +78,4 @@ Apos concluir a atualização iniciar os serviços Senior Documentos Eletrônico
 
 ## Vide de Demonstração
 
-<video controls="controls">
-  <source type="video/mp4" src="https://web.gruposcheffer.com/video/video_atualizacao.mp4"></source>
-  <p>Your browser does not support the video element.</p>
-</video>
+!video[Atualização](https://web.gruposcheffer.com/video/video_atualizacao.mp4)
